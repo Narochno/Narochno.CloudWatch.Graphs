@@ -33,7 +33,11 @@ namespace Narochno.CloudWatch.Graphs.Internal
         {
             if (Dimensions.Any())
             {
-                return $"{string.Join(",", Dimensions.Select(x => x.Value))} {Name}";
+                if (Dimensions.Count > 1)
+                {
+                    return Dimensions.Last().Value;
+                }
+                return $"{Dimensions.Single().Value} {Name}";
             }
 
             return Name;
