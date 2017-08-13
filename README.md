@@ -1,4 +1,4 @@
-# Narochno.CloudWatch.Graphs [![Build status](https://ci.appveyor.com/api/projects/status/7p7owa4ksp8w2jk2/branch/master?svg=true)](https://ci.appveyor.com/project/Narochno/narochno-jenkins/branch/master) [![NuGet](https://img.shields.io/nuget/v/Narochno.CloudWatch.Graphs.svg)](https://www.nuget.org/packages/Narochno.CloudWatch.Graphs/)
+# Narochno.CloudWatch.Graphs [![Build status](https://ci.appveyor.com/api/projects/status/7p7owa4ksp8w2jk2/branch/master?svg=true)](https://ci.appveyor.com/project/Narochno/narochno-cloudwatch-graphs/branch/master) [![NuGet](https://img.shields.io/nuget/v/Narochno.CloudWatch.Graphs.svg)](https://www.nuget.org/packages/Narochno.CloudWatch.Graphs/)
 A library for plotting graphs from CloudWatch metrics.
 
 ## Example Usage
