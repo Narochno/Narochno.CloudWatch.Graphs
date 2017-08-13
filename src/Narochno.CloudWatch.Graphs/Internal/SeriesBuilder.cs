@@ -43,26 +43,7 @@ namespace Narochno.CloudWatch.Graphs.Internal
                     throw new InvalidOperationException($"Generated time slice array doesn't contain {dataPoint.Timestamp}");
                 }
 
-                switch (metric.StatisticType)
-                {
-                    case StatisticType.Average:
-                        points[dataPoint.Timestamp] = dataPoint.Average;
-                        break;
-                    case StatisticType.Sum:
-                        points[dataPoint.Timestamp] = dataPoint.Sum;
-                        break;
-                    case StatisticType.SampleCount:
-                        points[dataPoint.Timestamp] = dataPoint.SampleCount;
-                        break;
-                    case StatisticType.Maximum:
-                        points[dataPoint.Timestamp] = dataPoint.Maximum;
-                        break;
-                    case StatisticType.Minimum:
-                        points[dataPoint.Timestamp] = dataPoint.Minimum;
-                        break;
-                    default:
-                        throw new InvalidOperationException($"Statistic type {metric.StatisticType} not supported");
-                }
+                points[dataPoint.Timestamp] = dataPoint.StatisticTypeValue(metric.StatisticType);
             }
 
             series.ItemsSource = points.Select(x => DateTimeAxis.CreateDataPoint(x.Key, x.Value));

@@ -1,5 +1,6 @@
 ﻿using Amazon.CloudWatch;
 using Amazon.CloudWatch.Model;
+using ByteSizeLib;
 using OxyPlot;
 using OxyPlot.Axes;
 using System;
@@ -50,6 +51,7 @@ namespace Narochno.CloudWatch.Graphs.Internal
             var model = new PlotModel
             {
                 DefaultFont = "Arial",
+                Padding = new OxyThickness(20d),
                 LegendPlacement = LegendPlacement.Outside,
                 LegendPosition = LegendPosition.BottomLeft,
                 LegendOrientation = LegendOrientation.Horizontal,
@@ -72,15 +74,21 @@ namespace Narochno.CloudWatch.Graphs.Internal
                 PlotAreaBorderColor = OxyColor.FromRgb(204, 204, 204)
             };
 
-            var yAxis = new LinearAxis
+            var dataRanges = new List<Tuple<StandardUnit, double>>();
+
+            foreach (var response in responses.Where(x => x.Value.Result.Datapoints.Any()))
             {
-                Position = AxisPosition.Left,
-                TicklineColor = OxyColor.FromArgb(0, 0, 0, 0),
-                MajorGridlineStyle = LineStyle.Solid,
-                MajorGridlineColor = OxyColor.FromRgb(230, 230, 230),
-                MinorGridlineStyle = LineStyle.Solid,
-                MinorGridlineColor = OxyColor.FromRgb(244, 244, 244)
-            };
+                var orderedData = response.Value.Result.Datapoints.OrderByDescending(i => i.StatisticTypeValue(response.Key.StatisticType));
+
+                var highestDataPoint = orderedData.First();
+                var lowestDataPoint = orderedData.Last();
+
+                dataRanges.Add(Tuple.Create(highestDataPoint.Unit, highestDataPoint.StatisticTypeValue(response.Key.StatisticType)));
+                dataRanges.Add(Tuple.Create(lowestDataPoint.Unit, lowestDataPoint.StatisticTypeValue(response.Key.StatisticType)));
+
+                var series = seriesBuilder.BuildSeries(response.Key, response.Value.Result.Datapoints);
+                model.Series.Add(series);
+            }
 
             var aAxis = new DateTimeAxis
             {
@@ -91,16 +99,59 @@ namespace Narochno.CloudWatch.Graphs.Internal
                 StringFormat = GetTimeFormat()
             };
 
-            model.Axes.Add(yAxis);
+            model.Axes.Add(InferYAxis(dataRanges));
             model.Axes.Add(aAxis);
 
-            foreach (var response in responses.Where(x => x.Value.Result.Datapoints.Any()))
+            return model;
+        }
+
+        public Axis InferYAxis(IList<Tuple<StandardUnit, double>> dataRanges)
+        {
+            var highest = dataRanges.Max(x => x.Item2);
+            var lowest = dataRanges.Min(x => x.Item2);
+
+            var yAxis = new LinearAxis
             {
-                var series = seriesBuilder.BuildSeries(response.Key, response.Value.Result.Datapoints);
-                model.Series.Add(series);
+                Position = AxisPosition.Left,
+                Minimum = lowest,
+                IntervalLength = 30,
+                Maximum = highest,
+                TicklineColor = OxyColor.FromArgb(0, 0, 0, 0),
+                MajorGridlineStyle = LineStyle.Solid,
+                MajorGridlineColor = OxyColor.FromRgb(230, 230, 230),
+                MinorGridlineStyle = LineStyle.Solid,
+                MinorGridlineColor = OxyColor.FromRgb(244, 244, 244)
+            };
+
+            var unit = dataRanges.First().Item1;
+
+            // Only apply formatting for specific unit
+            // if all data points are using the same
+            if (dataRanges.All(x => x.Item1 == unit))
+            {
+                if (unit == StandardUnit.Bits || unit == StandardUnit.BitsSecond)
+                {
+                    yAxis.LabelFormatter = (value) => ByteSize.FromBits((long)value).ToString();
+                }
+                if (unit == StandardUnit.Bytes || unit == StandardUnit.BytesSecond)
+                {
+                    yAxis.LabelFormatter = (value) => ByteSize.FromBytes(value).ToString();
+                }
+                if (unit == StandardUnit.Megabytes || unit == StandardUnit.MegabytesSecond)
+                {
+                    yAxis.LabelFormatter = (value) => ByteSize.FromMegaBytes(value).ToString();
+                }
+                if (unit == StandardUnit.Gigabytes || unit == StandardUnit.GigabytesSecond)
+                {
+                    yAxis.LabelFormatter = (value) => ByteSize.FromGigaBytes(value).ToString();
+                }
+                if (unit == StandardUnit.Terabytes || unit == StandardUnit.TerabytesSecond)
+                {
+                    yAxis.LabelFormatter = (value) => ByteSize.FromTeraBytes(value).ToString();
+                }
             }
 
-            return model;
+            return yAxis;
         }
 
         public string GetTimeFormat()

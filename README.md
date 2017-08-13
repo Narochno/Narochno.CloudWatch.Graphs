@@ -24,7 +24,7 @@ var svgExporter = new SvgExporter
     Height = 300
 };
 
-using (var output = File.OpenWrite("example.svg"))
+using (var output = File.Open("example.svg", FileMode.Create))
 {
     svgExporter.Export(plotModel, output);
 }
