@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>A library for plotting graphs from CloudWatch metrics.</Description>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <Authors>alanedwardes</Authors>
+    <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
+    <AssemblyName>Narochno.CloudWatch.Graphs</AssemblyName>
+    <PackageId>Narochno.CloudWatch.Graphs</PackageId>
+    <PackageTags>cloudwatch;graphs;metrics</PackageTags>
+    <PackageIconUrl>https://avatars.githubusercontent.com/u/24652538</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/Narochno/Narochno.CloudWatch.Graphs</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
+    <PackageReference Include="System.Collections" Version="4.3.0" />
+    <PackageReference Include="System.Linq" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
+    <PackageReference Include="System.Runtime" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.CloudWatch" Version="3.3.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.1" />
+    <PackageReference Include="OxyPlot.Core" Version="2.0.0-unstable1013" />
+  </ItemGroup>
+</Project>
