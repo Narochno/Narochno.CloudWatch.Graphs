@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>A library for plotting graphs from CloudWatch metrics.</Description>
-    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionPrefix>1.0.1</VersionPrefix>
     <Authors>alanedwardes</Authors>
     <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
     <AssemblyName>Narochno.CloudWatch.Graphs</AssemblyName>
@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.CloudWatch" Version="3.3.4" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.1" />
     <PackageReference Include="OxyPlot.Core" Version="2.0.0-unstable1013" />
   </ItemGroup>
 </Project>

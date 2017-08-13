@@ -7,13 +7,13 @@ namespace Narochno.CloudWatch.Graphs.Internal
 {
     public class PlotMetric : IPlotMetricBuilder
     {
-        private readonly PlotBuilder plotBuilder;
+        private readonly IPlotTimeBuilder plotTimeBuilder;
 
-        public PlotMetric(string metricNamespace, string metricName, PlotBuilder plotBuilder)
+        public PlotMetric(string metricNamespace, string metricName, IPlotTimeBuilder plotTimeBuilder)
         {
             Name = metricName;
             Namespace = metricNamespace;
-            this.plotBuilder = plotBuilder;
+            this.plotTimeBuilder = plotTimeBuilder;
         }
 
         public string Name { get; private set; }
@@ -57,7 +57,7 @@ namespace Narochno.CloudWatch.Graphs.Internal
             StatisticType = statisticType;
             GraphType = graphType;
             Period = period;
-            return plotBuilder;
+            return plotTimeBuilder;
         }
     }
 }
