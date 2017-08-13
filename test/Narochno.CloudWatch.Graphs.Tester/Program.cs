@@ -31,25 +31,22 @@ namespace Narochno.CloudWatch.Graphs.Tester
 
             var plotBuilder = provider.GetService<IPlotBuilder>();
 
-            var builder = plotBuilder.WithTime(DateTime.UtcNow.AddDays(-4), DateTime.UtcNow)
+            var plotModel = await plotBuilder.WithTime(DateTime.UtcNow.AddDays(-4), DateTime.UtcNow)
                 .AddMetric("AWS/Logs", "IncomingBytes")
                     .PlotGraph(GraphType.Line, StatisticType.Average, TimeSpan.FromMinutes(5))
-                .AddMetric("AWS/Logs", "IncomingLogEvents")
-                    .PlotGraph(GraphType.Line, StatisticType.Average, TimeSpan.FromMinutes(5));
+                .Generate();
 
-            var model = await builder.Generate();
-
-
-            var svgExporter = new SvgExporter();
-
-            svgExporter.Width = 1000;
-            svgExporter.Height = 300;
+            var svgExporter = new SvgExporter
+            {
+                Width = 1000,
+                Height = 300
+            };
 
             File.Delete("test.svg");
 
             using (var output = File.OpenWrite("test.svg"))
             {
-                svgExporter.Export(model, output);
+                svgExporter.Export(plotModel, output);
             }
         }
     }
