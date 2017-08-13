@@ -3,7 +3,7 @@ A library for plotting graphs from CloudWatch metrics.
 
 ## Example Usage
 
-![Example](example.svg)
+![Example](example.png)
 
 ```csharp
 var provider = new ServiceCollection()

@@ -42,9 +42,9 @@ namespace Narochno.CloudWatch.Graphs.Tester
                 Height = 300
             };
 
-            File.Delete("test.svg");
+            File.Delete("example.svg");
 
-            using (var output = File.OpenWrite("test.svg"))
+            using (var output = File.OpenWrite("example.svg"))
             {
                 svgExporter.Export(plotModel, output);
             }
