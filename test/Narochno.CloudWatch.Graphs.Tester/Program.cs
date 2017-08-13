@@ -38,7 +38,7 @@ namespace Narochno.CloudWatch.Graphs.Tester
 
             var svgExporter = new SvgExporter
             {
-                Width = 1000,
+                Width = 750,
                 Height = 300
             };
 

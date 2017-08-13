@@ -3,7 +3,7 @@ A library for plotting graphs from CloudWatch metrics.
 
 ## Example Usage
 
-![Example](example.png)
+![Example](example.svg)
 
 ```csharp
 var provider = new ServiceCollection()
@@ -20,11 +20,11 @@ var plotModel = await plotBuilder.WithTime(DateTime.UtcNow.AddDays(-4), DateTime
 
 var svgExporter = new SvgExporter
 {
-    Width = 1000,
-	Height = 300
+    Width = 750,
+    Height = 300
 };
 
-using (var output = File.OpenWrite("test.svg"))
+using (var output = File.OpenWrite("example.svg"))
 {
     svgExporter.Export(plotModel, output);
 }
