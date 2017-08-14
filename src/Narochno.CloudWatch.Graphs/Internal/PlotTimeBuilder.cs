@@ -43,7 +43,8 @@ namespace Narochno.CloudWatch.Graphs.Internal
                 StartTime = metricStartTime,
                 Dimensions = x.Dimensions,
                 EndTime = metricEndTime,
-                Statistics = new List<string> { x.StatisticType.ToString() }
+                Statistics = x.StatisticType.GetRequestStatistics(),
+                ExtendedStatistics = x.StatisticType.GetRequestExtendedStatistics()
             }));
 
             await Task.WhenAll(responses.Select(x => x.Value));
