@@ -32,8 +32,7 @@ namespace Narochno.CloudWatch.Graphs.Tester
             var plotBuilder = provider.GetService<IPlotBuilder>();
 
             var plotModel = await plotBuilder.WithTime(DateTime.UtcNow.AddDays(-4), DateTime.UtcNow)
-                .AddMetric("AWS/ApiGateway", "Latency")
-                    .WithDimension("ApiName", "api.iamestranged.com")
+                .AddMetric("AWS/Logs", "IncomingBytes")
                     .PlotGraph(GraphType.Line, StatisticType.Average, TimeSpan.FromMinutes(5))
                 .Generate();
 
