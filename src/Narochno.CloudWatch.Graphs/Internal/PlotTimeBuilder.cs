@@ -3,6 +3,7 @@ using Amazon.CloudWatch.Model;
 using ByteSizeLib;
 using OxyPlot;
 using OxyPlot.Axes;
+using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,15 +80,15 @@ namespace Narochno.CloudWatch.Graphs.Internal
 
             foreach (var response in responses.Where(x => x.Value.Result.Datapoints.Any()))
             {
-                var orderedData = response.Value.Result.Datapoints.OrderByDescending(i => i.StatisticTypeValue(response.Key.StatisticType));
+                IEnumerable<Datapoint> orderedData = response.Value.Result.Datapoints.OrderByDescending(i => i.StatisticTypeValue(response.Key.StatisticType));
 
-                var highestDataPoint = orderedData.First();
-                var lowestDataPoint = orderedData.Last();
+                Datapoint highestDataPoint = orderedData.First();
+                Datapoint lowestDataPoint = orderedData.Last();
 
                 dataRanges.Add(Tuple.Create(highestDataPoint.Unit, highestDataPoint.StatisticTypeValue(response.Key.StatisticType)));
                 dataRanges.Add(Tuple.Create(lowestDataPoint.Unit, lowestDataPoint.StatisticTypeValue(response.Key.StatisticType)));
 
-                var series = seriesBuilder.BuildSeries(response.Key, response.Value.Result.Datapoints);
+                Series series = seriesBuilder.BuildSeries(response.Key, response.Value.Result.Datapoints);
                 model.Series.Add(series);
             }
 
@@ -108,8 +109,8 @@ namespace Narochno.CloudWatch.Graphs.Internal
 
         public Axis InferYAxis(IList<Tuple<StandardUnit, double>> dataRanges)
         {
-            var highest = dataRanges.Max(x => x.Item2);
-            var lowest = dataRanges.Min(x => x.Item2);
+            double highest = dataRanges.Max(x => x.Item2);
+            double lowest = dataRanges.Min(x => x.Item2);
 
             var yAxis = new LinearAxis
             {
@@ -124,7 +125,7 @@ namespace Narochno.CloudWatch.Graphs.Internal
                 MinorGridlineColor = OxyColor.FromRgb(244, 244, 244)
             };
 
-            var unit = dataRanges.First().Item1;
+            StandardUnit unit = dataRanges.First().Item1;
 
             // Only apply formatting for specific unit
             // if all data points are using the same
@@ -157,7 +158,7 @@ namespace Narochno.CloudWatch.Graphs.Internal
 
         public string GetTimeFormat()
         {
-            var period = metricEndTime - metricStartTime;
+            TimeSpan period = metricEndTime - metricStartTime;
             if (period > TimeSpan.FromDays(1))
             {
                 return "MM/dd";

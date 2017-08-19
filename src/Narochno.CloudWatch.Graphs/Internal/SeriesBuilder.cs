@@ -33,17 +33,21 @@ namespace Narochno.CloudWatch.Graphs.Internal
         {
             series.Title = metric.GetTitle();
 
-            var points = metric.GetIncrements(dataPoints.Min(x => x.Timestamp), dataPoints.Max(x => x.Timestamp))
-                               .ToDictionary(x => x, y => double.NaN);
+            DateTime startTime = dataPoints.Min(x => x.Timestamp).ToUniversalTime();
+            DateTime endTime = dataPoints.Max(x => x.Timestamp).ToUniversalTime();
+
+            IDictionary<DateTime, double> points = metric.GetIncrements(startTime, endTime).ToDictionary(x => x, y => double.NaN);
 
             foreach (var dataPoint in dataPoints)
             {
-                if (!points.ContainsKey(dataPoint.Timestamp))
+                DateTime timestamp = dataPoint.Timestamp.ToUniversalTime();
+
+                if (!points.ContainsKey(timestamp))
                 {
-                    throw new InvalidOperationException($"Generated time slice array doesn't contain {dataPoint.Timestamp}");
+                    throw new InvalidOperationException($"Generated time slice array doesn't contain {timestamp}");
                 }
 
-                points[dataPoint.Timestamp] = dataPoint.StatisticTypeValue(metric.StatisticType);
+                points[timestamp] = dataPoint.StatisticTypeValue(metric.StatisticType);
             }
 
             series.ItemsSource = points.Select(x => DateTimeAxis.CreateDataPoint(x.Key, x.Value));
