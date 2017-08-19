@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>A library for plotting graphs from CloudWatch metrics.</Description>
+    <Description>A fluent library for exporting graph images from CloudWatch metrics.</Description>
     <VersionPrefix>1.3.0</VersionPrefix>
     <Authors>alanedwardes</Authors>
     <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
