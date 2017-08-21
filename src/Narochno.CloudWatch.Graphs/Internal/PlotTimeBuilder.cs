@@ -109,8 +109,8 @@ namespace Narochno.CloudWatch.Graphs.Internal
 
         public Axis InferYAxis(IList<Tuple<StandardUnit, double>> dataRanges)
         {
-            double highest = dataRanges.Max(x => x.Item2);
-            double lowest = dataRanges.Min(x => x.Item2);
+            double highest = dataRanges.Any() ? dataRanges.Max(x => x.Item2) : 0d;
+            double lowest = dataRanges.Any() ? dataRanges.Min(x => x.Item2) : 0d;
 
             var yAxis = new LinearAxis
             {
@@ -124,6 +124,11 @@ namespace Narochno.CloudWatch.Graphs.Internal
                 MinorGridlineStyle = LineStyle.Solid,
                 MinorGridlineColor = OxyColor.FromRgb(244, 244, 244)
             };
+
+            if (!dataRanges.Any())
+            {
+                return yAxis;
+            }
 
             StandardUnit unit = dataRanges.First().Item1;
 
@@ -159,12 +164,22 @@ namespace Narochno.CloudWatch.Graphs.Internal
         public string GetTimeFormat()
         {
             TimeSpan period = metricEndTime - metricStartTime;
-            if (period > TimeSpan.FromDays(1))
+            if (period > TimeSpan.FromDays(180))
             {
-                return "MM/dd";
+                return "MMM/yyyy";
             }
 
-            return "H:mm";
+            if (period > TimeSpan.FromDays(1))
+            {
+                return "dd/MMM";
+            }
+
+            if (period > TimeSpan.FromMinutes(5))
+            {
+                return "H:mm";
+            }
+
+            return "H:mm:ss";
         }
     }
 }
