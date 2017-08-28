@@ -18,6 +18,8 @@ namespace Narochno.CloudWatch.Graphs.Internal
         private DateTime metricEndTime;
         private readonly IAmazonCloudWatch cloudWatch;
         private readonly ISeriesBuilder seriesBuilder;
+        private string title;
+        private string subtitle;
 
         public PlotTimeBuilder(IAmazonCloudWatch cloudWatch, ISeriesBuilder seriesBuilder, DateTime metricStartTime, DateTime metricEndTime)
         {
@@ -52,26 +54,13 @@ namespace Narochno.CloudWatch.Graphs.Internal
 
             var model = new PlotModel
             {
-                DefaultFont = "Arial",
+                Title = title,
+                Subtitle = subtitle,
                 Padding = new OxyThickness(20d),
                 LegendPlacement = LegendPlacement.Outside,
                 LegendPosition = LegendPosition.BottomLeft,
                 LegendOrientation = LegendOrientation.Horizontal,
-                DefaultColors = new List<OxyColor>
-                {
-                    OxyColor.FromRgb(31, 119, 180),
-                    OxyColor.FromRgb(255, 127, 14),
-                    OxyColor.FromRgb(44, 160, 44),
-                    OxyColor.FromRgb(214, 39, 40),
-                    OxyColor.FromRgb(44, 160, 44),
-                    OxyColor.FromRgb(148, 103, 189),
-                    OxyColor.FromRgb(140, 86, 75),
-                    OxyColor.FromRgb(227, 119, 194),
-                    OxyColor.FromRgb(127, 127, 127),
-                    OxyColor.FromRgb(189, 189, 34),
-                    OxyColor.FromRgb(23, 190, 207),
-                    OxyColor.FromRgb(174, 199, 232)
-                },
+                DefaultColors = GraphConstants.Colors,
                 PlotAreaBorderThickness = new OxyThickness(0d, 0d, 0d, 1d),
                 PlotAreaBorderColor = OxyColor.FromRgb(204, 204, 204)
             };
@@ -180,6 +169,13 @@ namespace Narochno.CloudWatch.Graphs.Internal
             }
 
             return "H:mm:ss";
+        }
+
+        public IPlotTimeBuilder WithTitle(string title, string subtitle)
+        {
+            this.title = title;
+            this.subtitle = subtitle;
+            return this;
         }
     }
 }
