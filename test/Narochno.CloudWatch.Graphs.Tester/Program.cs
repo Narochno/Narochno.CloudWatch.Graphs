@@ -33,6 +33,7 @@ namespace Narochno.CloudWatch.Graphs.Tester
 
             var plotModel = await plotBuilder.WithTime(DateTime.UtcNow.AddDays(-4), DateTime.UtcNow)
                 .AddMetric("AWS/Logs", "IncomingBytes")
+                    .WithLabel("Average Incoming Bytes")
                     .PlotGraph(GraphType.Line, StatisticType.Average, TimeSpan.FromMinutes(5))
                 .WithTitle("CloudWatch Logs Incoming Bytes")
                 .Generate();

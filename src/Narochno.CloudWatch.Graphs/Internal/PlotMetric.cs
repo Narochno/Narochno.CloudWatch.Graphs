@@ -22,6 +22,7 @@ namespace Narochno.CloudWatch.Graphs.Internal
         public StatisticType StatisticType { get; private set; }
         public GraphType GraphType { get; private set; }
         public string Namespace { get; private set; }
+        public string Label { get; private set; }
 
         public IPlotMetricBuilder WithDimension(string dimensionName, string dimensionValue)
         {
@@ -31,6 +32,11 @@ namespace Narochno.CloudWatch.Graphs.Internal
 
         public string GetTitle()
         {
+            if (Label != null)
+            {
+                return Label;
+            }
+
             if (Dimensions.Any())
             {
                 if (Dimensions.Count > 1)
@@ -62,6 +68,12 @@ namespace Narochno.CloudWatch.Graphs.Internal
             GraphType = graphType;
             Period = period;
             return plotTimeBuilder;
+        }
+
+        public IPlotMetricBuilder WithLabel(string label)
+        {
+            Label = label;
+            return this;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Amazon.CloudWatch;
 using Amazon.CloudWatch.Model;
-using ByteSizeLib;
+using Humanizer;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -125,25 +125,69 @@ namespace Narochno.CloudWatch.Graphs.Internal
             // if all data points are using the same
             if (dataRanges.All(x => x.Item1 == unit))
             {
-                if (unit == StandardUnit.Bits || unit == StandardUnit.BitsSecond)
+                if (unit == StandardUnit.Bits)
                 {
-                    yAxis.LabelFormatter = (value) => ByteSize.FromBits((long)value).ToString();
+                    yAxis.LabelFormatter = (value) => ((long)value).Bits().Humanize();
                 }
-                if (unit == StandardUnit.Bytes || unit == StandardUnit.BytesSecond)
+                if (unit == StandardUnit.BitsSecond)
                 {
-                    yAxis.LabelFormatter = (value) => ByteSize.FromBytes(value).ToString();
+                    yAxis.LabelFormatter = (value) => ((long)value).Bits().Humanize() + "/sec";
                 }
-                if (unit == StandardUnit.Megabytes || unit == StandardUnit.MegabytesSecond)
+                if (unit == StandardUnit.Kilobytes)
                 {
-                    yAxis.LabelFormatter = (value) => ByteSize.FromMegaBytes(value).ToString();
+                    yAxis.LabelFormatter = (value) => value.Kilobytes().Humanize();
                 }
-                if (unit == StandardUnit.Gigabytes || unit == StandardUnit.GigabytesSecond)
+                if (unit == StandardUnit.KilobytesSecond)
                 {
-                    yAxis.LabelFormatter = (value) => ByteSize.FromGigaBytes(value).ToString();
+                    yAxis.LabelFormatter = (value) => value.Kilobytes().Humanize() + "/sec";
                 }
-                if (unit == StandardUnit.Terabytes || unit == StandardUnit.TerabytesSecond)
+                if (unit == StandardUnit.Bytes)
                 {
-                    yAxis.LabelFormatter = (value) => ByteSize.FromTeraBytes(value).ToString();
+                    yAxis.LabelFormatter = (value) => value.Bytes().Humanize();
+                }
+                if (unit == StandardUnit.BytesSecond)
+                {
+                    yAxis.LabelFormatter = (value) => value.Bytes().Humanize() + "/sec";
+                }
+                if (unit == StandardUnit.Megabytes)
+                {
+                    yAxis.LabelFormatter = (value) => value.Megabytes().Humanize();
+                }
+                if (unit == StandardUnit.MegabytesSecond)
+                {
+                    yAxis.LabelFormatter = (value) => value.Megabytes().Humanize() + "/sec";
+                }
+                if (unit == StandardUnit.Gigabytes)
+                {
+                    yAxis.LabelFormatter = (value) => value.Gigabytes().Humanize();
+                }
+                if (unit == StandardUnit.GigabytesSecond)
+                {
+                    yAxis.LabelFormatter = (value) => value.Gigabytes().Humanize() + "/sec";
+                }
+                if (unit == StandardUnit.Terabytes)
+                {
+                    yAxis.LabelFormatter = (value) => value.Terabytes().Humanize();
+                }
+                if (unit == StandardUnit.TerabytesSecond)
+                {
+                    yAxis.LabelFormatter = (value) => value.Terabytes().Humanize() + "/sec";
+                }
+                if (unit == StandardUnit.Milliseconds)
+                {
+                    yAxis.LabelFormatter = (value) => TimeSpan.FromMilliseconds(value).Humanize();
+                }
+                if (unit == StandardUnit.Seconds)
+                {
+                    yAxis.LabelFormatter = (value) => TimeSpan.FromSeconds(value).Humanize();
+                }
+                if (unit == StandardUnit.Microseconds)
+                {
+                    yAxis.LabelFormatter = (value) => $"{value} μs";
+                }
+                if (unit == StandardUnit.Percent)
+                {
+                    yAxis.LabelFormatter = (value) => $"{value}%";
                 }
             }
 
