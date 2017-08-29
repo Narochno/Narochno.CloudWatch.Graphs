@@ -125,70 +125,7 @@ namespace Narochno.CloudWatch.Graphs.Internal
             // if all data points are using the same
             if (dataRanges.All(x => x.Item1 == unit))
             {
-                if (unit == StandardUnit.Bits)
-                {
-                    yAxis.LabelFormatter = (value) => ((long)value).Bits().Humanize();
-                }
-                if (unit == StandardUnit.BitsSecond)
-                {
-                    yAxis.LabelFormatter = (value) => ((long)value).Bits().Humanize() + "/sec";
-                }
-                if (unit == StandardUnit.Kilobytes)
-                {
-                    yAxis.LabelFormatter = (value) => value.Kilobytes().Humanize();
-                }
-                if (unit == StandardUnit.KilobytesSecond)
-                {
-                    yAxis.LabelFormatter = (value) => value.Kilobytes().Humanize() + "/sec";
-                }
-                if (unit == StandardUnit.Bytes)
-                {
-                    yAxis.LabelFormatter = (value) => value.Bytes().Humanize();
-                }
-                if (unit == StandardUnit.BytesSecond)
-                {
-                    yAxis.LabelFormatter = (value) => value.Bytes().Humanize() + "/sec";
-                }
-                if (unit == StandardUnit.Megabytes)
-                {
-                    yAxis.LabelFormatter = (value) => value.Megabytes().Humanize();
-                }
-                if (unit == StandardUnit.MegabytesSecond)
-                {
-                    yAxis.LabelFormatter = (value) => value.Megabytes().Humanize() + "/sec";
-                }
-                if (unit == StandardUnit.Gigabytes)
-                {
-                    yAxis.LabelFormatter = (value) => value.Gigabytes().Humanize();
-                }
-                if (unit == StandardUnit.GigabytesSecond)
-                {
-                    yAxis.LabelFormatter = (value) => value.Gigabytes().Humanize() + "/sec";
-                }
-                if (unit == StandardUnit.Terabytes)
-                {
-                    yAxis.LabelFormatter = (value) => value.Terabytes().Humanize();
-                }
-                if (unit == StandardUnit.TerabytesSecond)
-                {
-                    yAxis.LabelFormatter = (value) => value.Terabytes().Humanize() + "/sec";
-                }
-                if (unit == StandardUnit.Milliseconds)
-                {
-                    yAxis.LabelFormatter = (value) => TimeSpan.FromMilliseconds(value).Humanize();
-                }
-                if (unit == StandardUnit.Seconds)
-                {
-                    yAxis.LabelFormatter = (value) => TimeSpan.FromSeconds(value).Humanize();
-                }
-                if (unit == StandardUnit.Microseconds)
-                {
-                    yAxis.LabelFormatter = (value) => $"{value} μs";
-                }
-                if (unit == StandardUnit.Percent)
-                {
-                    yAxis.LabelFormatter = (value) => $"{value}%";
-                }
+                yAxis.LabelFormatter = unit.GetLabelFormatter();
             }
 
             return yAxis;
