@@ -17,9 +17,11 @@ var provider = new ServiceCollection()
 
 var plotBuilder = provider.GetService<IPlotBuilder>();
 
-var plotModel = await plotBuilder.WithTime(DateTime.UtcNow.AddDays(-4), DateTime.UtcNow)
+var plotModel = await plotBuilder.WithTime(DateTime.UtcNow.AddDays(-12), DateTime.UtcNow)
     .AddMetric("AWS/Logs", "IncomingBytes")
-        .PlotGraph(GraphType.Line, StatisticType.Average, TimeSpan.FromMinutes(5))
+        .WithLabel("Average Incoming Bytes")
+        .PlotGraph(GraphType.Line, StatisticType.Average, TimeSpan.FromMinutes(30))
+    .WithTitle("CloudWatch Logs Incoming Bytes")
     .Generate();
 
 var svgExporter = new SvgExporter
