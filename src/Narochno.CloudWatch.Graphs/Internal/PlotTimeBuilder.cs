@@ -84,10 +84,7 @@ namespace Narochno.CloudWatch.Graphs.Internal
             var aAxis = new DateTimeAxis
             {
                 Position = AxisPosition.Bottom,
-                Minimum = DateTimeAxis.ToDouble(metricStartTime),
-                Maximum = DateTimeAxis.ToDouble(metricEndTime),
-                TicklineColor = OxyColor.FromRgb(238, 238, 238),
-                StringFormat = GetTimeFormat()
+                TicklineColor = OxyColor.FromRgb(238, 238, 238)
             };
 
             model.Axes.Add(InferYAxis(dataRanges));
@@ -129,27 +126,6 @@ namespace Narochno.CloudWatch.Graphs.Internal
             }
 
             return yAxis;
-        }
-
-        public string GetTimeFormat()
-        {
-            TimeSpan period = metricEndTime - metricStartTime;
-            if (period > TimeSpan.FromDays(180))
-            {
-                return "MMM/yyyy";
-            }
-
-            if (period > TimeSpan.FromDays(1))
-            {
-                return "dd/MMM";
-            }
-
-            if (period > TimeSpan.FromMinutes(5))
-            {
-                return "H:mm";
-            }
-
-            return "H:mm:ss";
         }
 
         public IPlotTimeBuilder WithTitle(string title, string subtitle)
