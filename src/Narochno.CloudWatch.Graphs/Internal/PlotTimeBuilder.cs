@@ -84,7 +84,9 @@ namespace Narochno.CloudWatch.Graphs.Internal
             var aAxis = new DateTimeAxis
             {
                 Position = AxisPosition.Bottom,
-                TicklineColor = OxyColor.FromRgb(238, 238, 238)
+                TicklineColor = OxyColor.FromRgb(238, 238, 238),
+                Minimum = DateTimeAxis.ToDouble(metricStartTime),
+                Maximum = DateTimeAxis.ToDouble(metricEndTime)
             };
 
             model.Axes.Add(InferYAxis(dataRanges));
