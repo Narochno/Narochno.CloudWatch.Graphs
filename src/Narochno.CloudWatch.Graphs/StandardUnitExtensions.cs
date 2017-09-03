@@ -82,13 +82,8 @@ namespace Narochno.CloudWatch.Graphs
         {
             return timeSpan.Humanize().Replace("milliseconds", "ms")
                                       .Replace("millisecond", "ms")
-                                      .Replace("seconds", "s")
-                                      .Replace("second", "s")
-                                      .Replace("minute", "min")
-                                      .Replace("hour", "hr")
-                                      .Replace("day", "d")
-                                      .Replace("week", "wk")
-                                      .Replace("year", "yr");
+                                      .Replace("second", "sec")
+                                      .Replace("minute", "min");
         }
     }
 }
