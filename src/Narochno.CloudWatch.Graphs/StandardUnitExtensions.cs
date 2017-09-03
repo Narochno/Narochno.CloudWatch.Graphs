@@ -75,7 +75,7 @@ namespace Narochno.CloudWatch.Graphs
                 return (value) => value.ToString(DoubleFormatting) + "%";
             }
 
-            return null;
+            return (value) => value.ToString("N0");
         }
     }
 }

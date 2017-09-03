@@ -21,6 +21,47 @@ namespace Narochno.CloudWatch.Graphs.Internal
             this.dataPoints = dataPoints;
         }
 
+        public double TotalFontSize => PlotModel.DefaultFontSize * 4;
+
+        public OxySize GetTotalTextSize(IRenderContext rc)
+        {
+            return rc.MeasureText(GetTotalText(), PlotModel.DefaultFont, TotalFontSize);
+        }
+
+        public OxySize GetLabelSize(IRenderContext rc)
+        {
+            var shapeSize = new OxySize(PlotModel.DefaultFontSize, PlotModel.DefaultFontSize);
+            var textSize = rc.MeasureText(metric.GetTitle(), PlotModel.DefaultFont, PlotModel.DefaultFontSize);
+            return new OxySize(shapeSize.Width + textSize.Width, shapeSize.Height + textSize.Height);
+        }
+
+        public OxySize GetSize(IRenderContext rc)
+        {
+            var totalTextSize = GetTotalTextSize(rc);
+            var labelSize = GetLabelSize(rc);
+            return new OxySize(Math.Max(totalTextSize.Width, labelSize.Width), totalTextSize.Height + labelSize.Height);
+        }
+
+        public double GetTotal()
+        {
+            if (metric.StatisticType == StatisticType.Sum)
+            {
+                return dataPoints.Sum(x => x.Sum);
+            }
+
+            return dataPoints.Sum(x => x.StatisticTypeValue(metric.StatisticType)) / dataPoints.Count;
+        }
+
+        public string GetTotalText()
+        {
+            if (dataPoints.Count == 0)
+            {
+                return "0";
+            }
+
+            return dataPoints.First().Unit.GetLabelFormatter()(GetTotal());
+        }
+
         public override void Render(IRenderContext rc)
         {
             var numberOfSeries = PlotModel.Series.OfType<TotalSeries>().Count();
@@ -33,37 +74,9 @@ namespace Narochno.CloudWatch.Graphs.Internal
             var middleVerticalOffset = PlotModel.Height / 2;
             var slotColor = PlotModel.DefaultColors[slotNumber];
 
-            double value;
+            var label = GetTotalText();
 
-            if (metric.StatisticType == StatisticType.Sum)
-            {
-                value = dataPoints.Sum(x => x.Sum);
-            }
-            else
-            {
-                value = dataPoints.Sum(x => x.StatisticTypeValue(metric.StatisticType)) / dataPoints.Count;
-            }
-
-            string label;
-            if (dataPoints.Count == 0)
-            {
-                label = "0";
-            }
-            else
-            {
-                var formatter = dataPoints[0].Unit.GetLabelFormatter();
-                if (formatter != null)
-                {
-                    label = formatter(value);
-                }
-                else
-                {
-                    label = value.ToString("N0");
-                }
-            }
-
-            var totalTextFontSize = PlotModel.DefaultFontSize * 4;
-            var totalTextSize = rc.MeasureText(label, PlotModel.DefaultFont, totalTextFontSize);
+            var totalTextSize = rc.MeasureText(label, PlotModel.DefaultFont, TotalFontSize);
             var totalTextPosition = new ScreenPoint(middleHorizontalOffset - (totalTextSize.Width / 2), middleVerticalOffset - (totalTextSize.Height / 2));
 
             var keyShapeSize = new OxySize(PlotModel.DefaultFontSize, PlotModel.DefaultFontSize);
@@ -76,7 +89,7 @@ namespace Narochno.CloudWatch.Graphs.Internal
             var keyShapePosition = new ScreenPoint(keyHorizontalOffset, middleVerticalOffset + totalTextSize.Height);
             var keyTextPosition = new ScreenPoint(keyHorizontalOffset + keyShapeSize.Width + keyShapePadding, middleVerticalOffset + totalTextSize.Height);
 
-            rc.DrawText(totalTextPosition, label, TextColor, PlotModel.DefaultFont, totalTextFontSize);
+            rc.DrawText(totalTextPosition, label, TextColor, PlotModel.DefaultFont, TotalFontSize);
             rc.DrawRectangle(new OxyRect(keyShapePosition, keyShapeSize), slotColor, new OxyColor());
             rc.DrawText(keyTextPosition, metric.GetTitle(), TextColor, PlotModel.DefaultFont, PlotModel.DefaultFontSize);
         }
