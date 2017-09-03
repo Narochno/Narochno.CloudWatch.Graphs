@@ -60,11 +60,11 @@ namespace Narochno.CloudWatch.Graphs
             }
             if (unit == StandardUnit.Milliseconds)
             {
-                return (value) => TimeSpan.FromMilliseconds(value).Humanize();
+                return (value) => TimeSpan.FromMilliseconds(value).HumanizeShort();
             }
             if (unit == StandardUnit.Seconds)
             {
-                return (value) => TimeSpan.FromSeconds(value).Humanize();
+                return (value) => TimeSpan.FromSeconds(value).HumanizeShort();
             }
             if (unit == StandardUnit.Microseconds)
             {
@@ -76,6 +76,19 @@ namespace Narochno.CloudWatch.Graphs
             }
 
             return (value) => value.ToString("N0");
+        }
+
+        public static string HumanizeShort(this TimeSpan timeSpan)
+        {
+            return timeSpan.Humanize().Replace("milliseconds", "ms")
+                                      .Replace("millisecond", "ms")
+                                      .Replace("seconds", "s")
+                                      .Replace("second", "s")
+                                      .Replace("minute", "min")
+                                      .Replace("hour", "hr")
+                                      .Replace("day", "d")
+                                      .Replace("week", "wk")
+                                      .Replace("year", "yr");
         }
     }
 }
