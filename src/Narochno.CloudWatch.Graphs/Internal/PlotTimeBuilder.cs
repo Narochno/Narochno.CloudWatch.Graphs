@@ -89,8 +89,11 @@ namespace Narochno.CloudWatch.Graphs.Internal
                 Maximum = DateTimeAxis.ToDouble(metricEndTime)
             };
 
-            model.Axes.Add(InferYAxis(dataRanges));
-            model.Axes.Add(aAxis);
+            if (metrics.All(x => x.GraphType != GraphType.Total))
+            {
+                model.Axes.Add(InferYAxis(dataRanges));
+                model.Axes.Add(aAxis);
+            }
 
             return model;
         }

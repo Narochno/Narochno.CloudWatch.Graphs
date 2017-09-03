@@ -4,6 +4,7 @@
     {
         Line,
         Area,
-        Stair
+        Stair,
+        Total
     }
 }

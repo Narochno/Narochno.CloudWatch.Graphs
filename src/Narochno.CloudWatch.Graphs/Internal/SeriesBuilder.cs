@@ -24,6 +24,8 @@ namespace Narochno.CloudWatch.Graphs.Internal
                     return BuildXYSeries(metric, dataPoints, new StairStepSeries { StrokeThickness = 1.5d });
                 case GraphType.Line:
                     return BuildXYSeries(metric, dataPoints, new LineSeries { StrokeThickness = 1.5d });
+                case GraphType.Total:
+                    return new TotalSeries(metric, dataPoints);
                 default:
                     throw new NotImplementedException($"Graph type {metric.GraphType} not supported");
             }
