@@ -23,25 +23,6 @@ namespace Narochno.CloudWatch.Graphs.Internal
 
         public double TotalFontSize => PlotModel.DefaultFontSize * 4;
 
-        public OxySize GetTotalTextSize(IRenderContext rc)
-        {
-            return rc.MeasureText(GetTotalText(), PlotModel.DefaultFont, TotalFontSize);
-        }
-
-        public OxySize GetLabelSize(IRenderContext rc)
-        {
-            var shapeSize = new OxySize(PlotModel.DefaultFontSize, PlotModel.DefaultFontSize);
-            var textSize = rc.MeasureText(metric.GetTitle(), PlotModel.DefaultFont, PlotModel.DefaultFontSize);
-            return new OxySize(shapeSize.Width + textSize.Width, shapeSize.Height + textSize.Height);
-        }
-
-        public OxySize GetSize(IRenderContext rc)
-        {
-            var totalTextSize = GetTotalTextSize(rc);
-            var labelSize = GetLabelSize(rc);
-            return new OxySize(Math.Max(totalTextSize.Width, labelSize.Width), totalTextSize.Height + labelSize.Height);
-        }
-
         public double GetTotal()
         {
             if (metric.StatisticType == StatisticType.Sum)
