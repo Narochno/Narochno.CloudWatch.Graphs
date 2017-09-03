@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Amazon.CloudWatch.Model;
 using System.Linq;
 using Humanizer;
+using System.Globalization;
 
 namespace Narochno.CloudWatch.Graphs.Internal
 {
@@ -50,7 +51,15 @@ namespace Narochno.CloudWatch.Graphs.Internal
             }
             else
             {
-                label = dataPoints[0].Unit.GetLabelFormatter()(value);
+                var formatter = dataPoints[0].Unit.GetLabelFormatter();
+                if (formatter != null)
+                {
+                    label = formatter(value);
+                }
+                else
+                {
+                    label = value.ToString("N0");
+                }
             }
 
             var totalTextFontSize = PlotModel.DefaultFontSize * 4;
