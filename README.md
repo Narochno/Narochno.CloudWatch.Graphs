@@ -2,8 +2,8 @@
 A fluent library for exporting graph images from CloudWatch metrics.
 
 ## Supported Frameworks
-* netstandard1.3 and above
-* net45 and above
+* netstandard2.0
+* .NET Framework 4.7.1
 
 ## Example Usage
 
