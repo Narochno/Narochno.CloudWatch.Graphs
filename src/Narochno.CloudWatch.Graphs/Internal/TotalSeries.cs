@@ -70,9 +70,9 @@ namespace Narochno.CloudWatch.Graphs.Internal
             var keyShapePosition = new ScreenPoint(keyHorizontalOffset, middleVerticalOffset + totalTextSize.Height);
             var keyTextPosition = new ScreenPoint(keyHorizontalOffset + keyShapeSize.Width + keyShapePadding, middleVerticalOffset + totalTextSize.Height);
 
-            rc.DrawText(totalTextPosition, label, TextColor, PlotModel.DefaultFont, TotalFontSize);
+            rc.DrawText(totalTextPosition, label, PlotModel.TextColor, PlotModel.DefaultFont, TotalFontSize);
             rc.DrawRectangle(new OxyRect(keyShapePosition, keyShapeSize), slotColor, new OxyColor());
-            rc.DrawText(keyTextPosition, metric.GetTitle(), TextColor, PlotModel.DefaultFont, PlotModel.DefaultFontSize);
+            rc.DrawText(keyTextPosition, metric.GetTitle(), PlotModel.TextColor, PlotModel.DefaultFont, PlotModel.DefaultFontSize);
         }
 
         public override void RenderLegend(IRenderContext rc, OxyRect legendBox)
